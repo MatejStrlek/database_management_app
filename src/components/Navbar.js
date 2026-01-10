@@ -40,7 +40,7 @@ const Navbar = () => {
                                 </li>
                                 <li className="nav-item">
                                     <button
-                                        className="btn btn-sm ms-2"
+                                        className="nav-link btn btn-sm ms-2"
                                         onClick={handleLogout}
                                     >
                                         Logout

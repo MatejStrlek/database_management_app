@@ -82,6 +82,49 @@ const CustomerList = () => {
 
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+    const renderPageNumbers = () => {
+        const maxVisiblePages = 5;
+        const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        const pages = [];
+
+        if (startPage > 1) {
+            pages.push(1);
+            if (startPage > 2) {
+                pages.push('...');
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                pages.push('...');
+            }
+            pages.push(totalPages);
+        }
+
+        return pages.map((page, index) => (
+            <li
+                key={index}
+                className={`page-item ${page === currentPage ? 'active' : ''} ${page === '...' ? 'disabled' : ''}`}
+            >
+                {page === '...' ? (
+                    <span className="page-link">...</span>
+                ) : (
+                    <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(page)}
+                    >
+                        {page}
+                    </button>
+                )}
+            </li>
+        ));
+    };
+
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -198,45 +241,58 @@ const CustomerList = () => {
                         </table>
                     </div>
 
-                    {/* Pagination */}
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div>
+                    <div className="d-flex justify-content-between align-items-center mt-4">
+                        <div className="text-muted">
                             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
                         </div>
-                        <nav>
+
+                        <nav aria-label="Customer pagination">
                             <ul className="pagination mb-0">
                                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"
-                                        onClick={() => setCurrentPage(currentPage - 1)}
-                                        disabled={currentPage === 1}>
-                                        Previous
+                                        onClick={() => setCurrentPage(1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        « First
                                     </button>
                                 </li>
-                                {[...Array(totalPages)].map((_, index) => (
-                                    <li
-                                        key={index + 1}
-                                        className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}
+
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button
+                                        className="page-link"
+                                        onClick={() => setCurrentPage(currentPage - 1)}
+                                        disabled={currentPage === 1}
                                     >
-                                        <button
-                                            className="page-link"
-                                            onClick={() => setCurrentPage(index + 1)}
-                                        >
-                                            {index + 1}
-                                        </button>
-                                    </li>
-                                ))}
+                                        ‹ Previous
+                                    </button>
+                                </li>
+
+                                {renderPageNumbers()}
+
                                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"
                                         onClick={() => setCurrentPage(currentPage + 1)}
-                                        disabled={currentPage === totalPages}>
-                                        Next
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Next ›
+                                    </button>
+                                </li>
+
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button
+                                        className="page-link"
+                                        onClick={() => setCurrentPage(totalPages)}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Last »
                                     </button>
                                 </li>
                             </ul>
                         </nav>
                     </div>
+
                 </>
             )}
         </div>

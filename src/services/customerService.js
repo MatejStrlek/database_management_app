@@ -22,6 +22,7 @@ axiosInstance.interceptors.request.use(
 
 export const fetchCustomers = async (page = 1, limit = 10, sort = '', search = '') => {
     let url = `/Customer?_page=${page}&_limit=${limit}`;
+
     if (sort) {
         const [field, order] = sort.split(',');
         url += `&_sort=${field}&_order=${order}`;

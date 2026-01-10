@@ -23,6 +23,9 @@ const CustomerList = () => {
         try {
             const sortParam = sortField ? `${sortField},${sortOrder}` : '';
             const response = await fetchCustomers(currentPage, itemsPerPage, sortParam, searchQuery);
+
+            console.log('Customer data:', response.data[0]); // Debug - check first customer
+
             setCustomers(response.data);
             setTotalItems(response.total);
         } catch (err) {
@@ -126,17 +129,17 @@ const CustomerList = () => {
                         <table className="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th onClick={() => handleSort('firstName')} style={{ cursor: 'pointer' }}>
-                                        First Name {getSortIcon('firstName')}
+                                    <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+                                        First Name {getSortIcon('name')}
                                     </th>
-                                    <th onClick={() => handleSort('lastName')} style={{ cursor: 'pointer' }}>
-                                        Last Name {getSortIcon('lastName')}
+                                    <th onClick={() => handleSort('surname')} style={{ cursor: 'pointer' }}>
+                                        Last Name {getSortIcon('surname')}
                                     </th>
                                     <th onClick={() => handleSort('email')} style={{ cursor: 'pointer' }}>
                                         Email {getSortIcon('email')}
                                     </th>
-                                    <th onClick={() => handleSort('phone')} style={{ cursor: 'pointer' }}>
-                                        Phone {getSortIcon('phone')}
+                                    <th onClick={() => handleSort('telephone')} style={{ cursor: 'pointer' }}>
+                                        Phone {getSortIcon('telephone')}
                                     </th>
                                     <th>City</th>
                                     {isAuthenticated && <th>Actions</th>}
@@ -152,10 +155,10 @@ const CustomerList = () => {
                                 ) : (
                                     customers.map((customer) => (
                                         <tr key={customer.id}>
-                                            <td>{customer.firstName}</td>
-                                            <td>{customer.lastName}</td>
+                                            <td>{customer.name}</td>
+                                            <td>{customer.surname}</td>
                                             <td>{customer.email}</td>
-                                            <td>{customer.phone}</td>
+                                            <td>{customer.telephone}</td>
                                             <td>{customer.City?.name || 'N/A'}</td>
                                             {isAuthenticated && (
                                                 <td>

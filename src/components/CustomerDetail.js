@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { fetchCustomerById, deleteCustomer } from '../services/customerService';
 import { useAuth } from '../context/AuthContext';
@@ -11,11 +11,7 @@ const CustomerDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        loadCustomer();
-    }, [id]);
-
-    const loadCustomer = async () => {
+    const loadCustomer = useCallback(async () => {
         try {
             setLoading(true);
             const customerData = await fetchCustomerById(id);
@@ -26,7 +22,11 @@ const CustomerDetail = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        loadCustomer();
+    }, [loadCustomer]);
 
     const handleDelete = async () => {
         if (window.confirm('Are you sure you want to delete this customer?')) {

@@ -27,7 +27,7 @@ const CustomerList = () => {
 
             const citiesResponse = await fetchCities();
             const customersWithCities = response.data.map((customer) => {
-                const city = citiesResponse.find((c) => c.id == customer.cityId);
+                const city = citiesResponse.find((c) => c.id === customer.cityId);
                 return { ...customer, City: city || null };
             });
 

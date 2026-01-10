@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchCustomers, deleteCustomer } from '../services/customerService';
+import { fetchCustomers, deleteCustomer, fetchCities } from '../services/customerService';
 import { getAuthToken } from '../services/authService';
 
 const CustomerList = () => {
@@ -23,10 +23,15 @@ const CustomerList = () => {
         try {
             const sortParam = sortField ? `${sortField},${sortOrder}` : '';
             const response = await fetchCustomers(currentPage, itemsPerPage, sortParam, searchQuery);
-
             console.log('Customer data:', response.data); // Debug - check customers
 
-            setCustomers(response.data);
+            const citiesResponse = await fetchCities();
+            const customersWithCities = response.data.map((customer) => {
+                const city = citiesResponse.find((c) => c.id == customer.cityId);
+                return { ...customer, City: city || null };
+            });
+
+            setCustomers(customersWithCities);
             setTotalItems(response.total);
         } catch (err) {
             setError('Failed to fetch customers.');

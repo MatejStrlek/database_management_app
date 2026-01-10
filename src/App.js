@@ -26,13 +26,11 @@ function App() {
               <CustomerForm />
             </ProtectedRoute>
           } />
-          <Route
-            path="/customers/new"
-            element={
-              <ProtectedRoute>
-                <CustomerForm />
-              </ProtectedRoute>
-            }
+          <Route path="/customers/new" element={
+            <ProtectedRoute>
+              <CustomerForm />
+            </ProtectedRoute>
+          }
           />
         </Routes>
       </Router>

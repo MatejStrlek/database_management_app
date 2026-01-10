@@ -40,6 +40,7 @@ export const fetchCustomers = async (page = 1, limit = 10, sort = '', search = '
 
 export const fetchCustomerById = async (id) => {
     const response = await axiosInstance.get(`/Customer/${id}`);
+    console.log(response.data);
     return response.data;
 };
 

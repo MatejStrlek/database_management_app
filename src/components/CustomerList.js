@@ -24,7 +24,7 @@ const CustomerList = () => {
             const sortParam = sortField ? `${sortField},${sortOrder}` : '';
             const response = await fetchCustomers(currentPage, itemsPerPage, sortParam, searchQuery);
 
-            console.log('Customer data:', response.data[0]); // Debug - check first customer
+            console.log('Customer data:', response.data); // Debug - check customers
 
             setCustomers(response.data);
             setTotalItems(response.total);
@@ -129,6 +129,9 @@ const CustomerList = () => {
                         <table className="table table-striped table-hover">
                             <thead>
                                 <tr>
+                                    <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>
+                                        ID {getSortIcon('id')}
+                                    </th>
                                     <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
                                         First Name {getSortIcon('name')}
                                     </th>
@@ -155,6 +158,7 @@ const CustomerList = () => {
                                 ) : (
                                     customers.map((customer) => (
                                         <tr key={customer.id}>
+                                            <td>{customer.id}</td>
                                             <td>{customer.name}</td>
                                             <td>{customer.surname}</td>
                                             <td>{customer.email}</td>

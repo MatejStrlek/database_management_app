@@ -167,7 +167,7 @@ const CustomerList = () => {
                                             {isAuthenticated && (
                                                 <td>
                                                     <Link
-                                                        to={`/customers/${customer.id}`}
+                                                        to={`/customers/view/${customer.id}`}
                                                         className="btn btn-sm btn-info me-2"
                                                     >
                                                         View

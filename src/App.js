@@ -7,6 +7,8 @@ import CustomerList from './components/CustomerList';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import CustomerForm from './components/CustomerForm';
+import CustomerDetail from './components/CustomerDetail';
 
 function App() {
   return (
@@ -18,6 +20,20 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/customers" element={<CustomerList />} />
+          <Route path="/customers/view/:id" element={<CustomerDetail />} />
+          <Route path="/customers/edit/:id" element={
+            <ProtectedRoute>
+              <CustomerForm />
+            </ProtectedRoute>
+          } />
+          <Route
+            path="/customers/new"
+            element={
+              <ProtectedRoute>
+                <CustomerForm />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>

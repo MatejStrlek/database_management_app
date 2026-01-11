@@ -32,10 +32,12 @@ const BillList = () => {
         console.log('useEffect triggered for customerId:', customerId); // Debugging log
         fetchCustomer();
         fetchCreditCards();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [customerId]);
 
     useEffect(() => {
         fetchBills();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [customerId, currentPage, itemsPerPage]);
 
     const fetchCustomer = async () => {

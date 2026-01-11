@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { fetchCustomerById, deleteCustomer } from '../services/customerService';
+import { fetchCustomerById, deleteCustomer, fetchCities } from '../services/customerService';
 import { useAuth } from '../context/AuthContext';
 
 const CustomerDetail = () => {
@@ -15,7 +15,10 @@ const CustomerDetail = () => {
         try {
             setLoading(true);
             const customerData = await fetchCustomerById(id);
-            setCustomer(customerData);
+            const cities = await fetchCities();
+            const customerCity = cities.find(city => city.id == customerData.cityId);
+            const customerWithCity = { ...customerData, City: customerCity || null };
+            setCustomer(customerWithCity);
         } catch (err) {
             setError('Failed to load customer details');
             console.error(err);

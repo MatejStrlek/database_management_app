@@ -61,5 +61,6 @@ export const deleteCustomer = async (id) => {
 
 export const fetchCities = async () => {
     const response = await axiosInstance.get('/City');
+    console.log(response.data);
     return response.data;
 };

@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import CustomerForm from './components/CustomerForm';
 import CustomerDetail from './components/CustomerDetail';
+import BillList from './components/BillList';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             </ProtectedRoute>
           }
           />
+          <Route path="/customers/:customerId/bills" element={<BillList />} />
         </Routes>
       </Router>
     </AuthProvider>

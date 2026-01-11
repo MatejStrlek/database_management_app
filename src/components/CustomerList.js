@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchCustomers, deleteCustomer, fetchCities } from '../services/customerService';
 import { getAuthToken } from '../services/authService';
 
@@ -13,6 +13,7 @@ const CustomerList = () => {
     const [sortField, setSortField] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     const isAuthenticated = !!getAuthToken();
 
@@ -205,7 +206,11 @@ const CustomerList = () => {
                                     </tr>
                                 ) : (
                                     customers.map((customer) => (
-                                        <tr key={customer.id}>
+                                        <tr
+                                            key={customer.id}
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() => navigate(`/customers/${customer.id}/bills`)}
+                                        >
                                             <td>{customer.id}</td>
                                             <td>{customer.name}</td>
                                             <td>{customer.surname}</td>
@@ -213,7 +218,9 @@ const CustomerList = () => {
                                             <td>{customer.telephone}</td>
                                             <td>{customer.City?.name || 'N/A'}</td>
                                             {isAuthenticated && (
-                                                <td>
+                                                <td 
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
                                                     <Link
                                                         to={`/customers/view/${customer.id}`}
                                                         className="btn btn-sm btn-info me-2"

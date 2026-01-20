@@ -6,10 +6,17 @@ import { useAuth } from '../context/AuthContext';
 const CustomerDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { user } = useAuth();
     const [customer, setCustomer] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+            if (!user) {
+                navigate('/login', { replace: true });
+                return;
+            }
+        }, [user, navigate]);
 
     const loadCustomer = useCallback(async () => {
         try {
@@ -117,7 +124,7 @@ const CustomerDetail = () => {
                                 </div>
                             </div>
 
-                            {isAuthenticated && (
+                            {user && (
                                 <div className="row mt-4">
                                     <div className="col-12">
                                         <hr />

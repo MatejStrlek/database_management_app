@@ -237,7 +237,10 @@ const BillList = () => {
                         </tr>
                     ) : (
                         bills.map((bill) => (
-                            <tr key={bill.id}>
+                            <tr key={bill.id}
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate(`/bills/edit/${bill.id}`)}
+                            >
                                 <td>{bill.id}</td>
                                 <td>{formatDate(bill.date)}</td>
                                 <td>{formatCurrency(bill.total)}</td>
@@ -245,7 +248,7 @@ const BillList = () => {
                                 <td>{bill.comment}</td>
                                 {user && (
                                     <td>
-                                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(bill.id)}>Delete</button>
+                                        <button className="btn btn-sm btn-danger" onClick={(e) => { e.stopPropagation(); handleDelete(bill.id); }}>Delete</button>
                                     </td>
                                 )}
                             </tr>

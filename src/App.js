@@ -43,6 +43,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/bills/edit/:billId"
+            element={
+              <ProtectedRoute>
+                <BillForm />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>

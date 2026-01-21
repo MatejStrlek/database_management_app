@@ -107,20 +107,16 @@ const BillForm = () => {
 
         try {
             const bill = await getBillById(id);
-
-            console.log('Loaded bill:', bill);  // DEBUG
-            console.log('Bill sellerId:', bill.sellerId);  // DEBUG
-
             setBillData({
                 guid: bill.guid || '',
                 billNumber: bill.billNumber || '',
                 date: bill.date ? bill.date.split('T')[0] : new Date().toISOString().split('T')[0],
                 customerId: bill.customerId || null,
+                sellerId: bill.sellerId || null,
                 creditCardId: bill.creditCardId || '',
                 comment: bill.comment || '',
                 total: bill.total || 0,
             });
-
             if (bill.customerId) {
                 await loadCustomer(bill.customerId);
             }
@@ -130,7 +126,7 @@ const BillForm = () => {
         } catch (err) {
             setError('Failed to load bill data.');
         }
-    }, [billId, loadCustomer]);
+    }, [billId, loadCustomer, loadSeller]);
 
     useEffect(() => {
         const initializeForm = async () => {

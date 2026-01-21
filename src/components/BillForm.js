@@ -5,6 +5,7 @@ import { fetchCustomerById } from '../services/customerService';
 import { getAllCreditCards } from '../services/creditCardService';
 import { useAuth } from '../context/AuthContext';
 import BillItemsSection from './BillItemsSection';
+import { getSellerById, getAllSellers } from '../services/sellerService';
 
 const BillForm = () => {
     const { billId, customerId } = useParams();
@@ -23,6 +24,8 @@ const BillForm = () => {
     });
 
     const [customer, setCustomer] = useState(null);
+    const [seller, setSeller] = useState(null);
+    const [sellers, setSellers] = useState([]);
     const [creditCards, setCreditCards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -72,6 +75,24 @@ const BillForm = () => {
         }
     }, []);
 
+    const loadSeller = useCallback(async (id) => {
+        try {
+            const seller = await getSellerById(id);
+            setSeller(seller);
+        } catch (err) {
+            setError('Failed to load seller data.');
+        }
+    }, []);
+
+    const loadSellers = useCallback(async () => {
+        try {
+            const allSellers = await getAllSellers();
+            setSellers(allSellers);
+        } catch (err) {
+            setError('Failed to load sellers.');
+        }
+    }, []);
+
     const loadCreditCards = useCallback(async () => {
         try {
             const cards = await getAllCreditCards();
@@ -86,6 +107,10 @@ const BillForm = () => {
 
         try {
             const bill = await getBillById(id);
+
+            console.log('Loaded bill:', bill);  // DEBUG
+            console.log('Bill sellerId:', bill.sellerId);  // DEBUG
+
             setBillData({
                 guid: bill.guid || '',
                 billNumber: bill.billNumber || '',
@@ -99,6 +124,9 @@ const BillForm = () => {
             if (bill.customerId) {
                 await loadCustomer(bill.customerId);
             }
+            if (bill.sellerId) {
+                await loadSeller(bill.sellerId);
+            }
         } catch (err) {
             setError('Failed to load bill data.');
         }
@@ -110,7 +138,7 @@ const BillForm = () => {
                 if (!isEditMode && customerId) {
                     await loadCustomer(parseInt(customerId, 10));
                 }
-                await loadCreditCards();
+                await Promise.all([loadCreditCards(), loadSellers()]);
                 if (isEditMode) {
                     await loadBill(billId);
                 } else {
@@ -154,6 +182,38 @@ const BillForm = () => {
             return prev;
         });
     }, []);
+
+    const handleSellerChange = async (e) => {
+        const { value } = e.target;
+        const newSellerId = value === '' ? null : parseInt(value, 10);
+
+        setBillData(prev => ({
+            ...prev,
+            sellerId: newSellerId
+        }));
+
+        if (value) {
+            await loadSeller(newSellerId);
+        } else {
+            setSeller(null);
+        }
+
+        if (isEditMode && billId) {
+            try {
+                const currentBill = await getBillById(billId);
+                const payload = {
+                    ...currentBill,
+                    sellerId: newSellerId,
+                };
+                await updateBill(billId, payload);
+                setSuccessMessage('Seller updated successfully!');
+                setTimeout(() => setSuccessMessage(null), 3000);
+            } catch (err) {
+                console.error('Failed to update seller:', err);
+                setError('Failed to update seller.');
+            }
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -216,13 +276,6 @@ const BillForm = () => {
                             <h2 className="card-title mb-4">
                                 {isEditMode ? 'Edit Bill' : 'New Bill'}
                             </h2>
-                            {customer && (
-                                <div className="alert alert-info">
-                                    <strong>Customer:</strong> {customer.name} {customer.surname}
-                                    <br />
-                                    <small>{customer.email}</small>
-                                </div>
-                            )}
                             {successMessage && (
                                 <div className="alert alert-success alert-dismissible fade show" role="alert">
                                     <i className="bi bi-check-circle me-2"></i>
@@ -235,6 +288,39 @@ const BillForm = () => {
                                 </div>
                             )}
                             {error && <div className="alert alert-danger">{error}</div>}
+                            {customer && (
+                                <div className="alert alert-info">
+                                    <strong>Customer:</strong> {customer.name} {customer.surname}
+                                    <br />
+                                    <small>{customer.email}</small>
+                                </div>
+                            )}
+                            <div className="mb-3">
+                                {seller && (
+                                    <div className="alert alert-success mb-2">
+                                        <strong>Current Seller:</strong> {seller.name} {seller.surname}
+                                        <br />
+                                        <small>{seller.PermanentEmployee ? 'Permanent Employee' : 'Temporary Employee'}</small>
+                                    </div>
+                                )}
+                                <label htmlFor="sellerId" className="form-label">
+                                    {seller ? 'Change Seller' : 'Assign Seller'} <span className="text-muted">(optional)</span>
+                                </label>
+                                <select
+                                    className="form-select"
+                                    id="sellerId"
+                                    name="sellerId"
+                                    value={billData.sellerId || ''}
+                                    onChange={handleSellerChange}
+                                >
+                                    <option value="">-- Select Seller --</option>
+                                    {sellers.map(s => (
+                                        <option key={s.id} value={s.id}>
+                                            {s.name} {s.surname}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="billNumber" className="form-label">Bill Number</label>
@@ -268,11 +354,9 @@ const BillForm = () => {
                                         className="form-control"
                                         id="total"
                                         name="total"
-                                        min="0"
-                                        step="0.01"
                                         value={billData.total}
                                         onChange={handleChange}
-                                        readOnly={true}
+                                        readOnly={isEditMode}
                                         required
                                     />
                                 </div>
@@ -336,17 +420,6 @@ const BillForm = () => {
                                     </button>
                                 </div>
                             </form>
-                            {successMessage && (
-                                <div className="alert alert-success alert-dismissible fade show" role="alert">
-                                    <i className="bi bi-check-circle me-2"></i>
-                                    {successMessage}
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        onClick={() => setSuccessMessage(null)}
-                                    ></button>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>

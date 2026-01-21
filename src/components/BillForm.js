@@ -272,6 +272,7 @@ const BillForm = () => {
                                         step="0.01"
                                         value={billData.total}
                                         onChange={handleChange}
+                                        readOnly={true}
                                         required
                                     />
                                 </div>

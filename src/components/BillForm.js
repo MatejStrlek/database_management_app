@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { createBill, getBillById, updateBill } from '../services/billService';
 import { fetchCustomerById } from '../services/customerService';
 import { getAllCreditCards } from '../services/creditCardService';
 import { useAuth } from '../context/AuthContext';
+import BillItemsSection from './BillItemsSection';
 
 const BillForm = () => {
     const { billId, customerId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user } = useAuth();
     const isEditMode = Boolean(billId);
     const [billData, setBillData] = useState({
@@ -25,6 +27,7 @@ const BillForm = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     useEffect(() => {
         if (!user) {
@@ -32,6 +35,17 @@ const BillForm = () => {
             return;
         }
     }, [user, navigate]);
+
+    useEffect(() => {
+        if (location.state?.message) {
+            setSuccessMessage(location.state.message);
+            window.history.replaceState({}, document.title);
+            const timer = setTimeout(() => {
+                setSuccessMessage(null);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [location.state]);
 
     const generateBillNumber = () => {
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -129,6 +143,18 @@ const BillForm = () => {
         }));
     };
 
+    const handleTotalChange = useCallback((newTotal) => {
+        setBillData(prev => {
+            if (prev.total !== newTotal) {
+                return {
+                    ...prev,
+                    total: newTotal
+                };
+            }
+            return prev;
+        });
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
@@ -151,11 +177,13 @@ const BillForm = () => {
 
             if (isEditMode) {
                 await updateBill(billId, payload);
+                navigate(`/customers/${billData.customerId}/bills`);
             } else {
-                await createBill(payload);
+                const createdBill = await createBill(payload);
+                navigate(`/bills/edit/${createdBill.id}`, {
+                    state: { message: 'Bill created! Now add items to the bill.' }
+                });
             }
-
-            navigate(`/customers/${billData.customerId}/bills`);
         } catch (err) {
             setError('Failed to save bill. Please try again.');
         } finally {
@@ -193,6 +221,17 @@ const BillForm = () => {
                                     <strong>Customer:</strong> {customer.name} {customer.surname}
                                     <br />
                                     <small>{customer.email}</small>
+                                </div>
+                            )}
+                            {successMessage && (
+                                <div className="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i className="bi bi-check-circle me-2"></i>
+                                    {successMessage}
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => setSuccessMessage(null)}
+                                    ></button>
                                 </div>
                             )}
                             {error && <div className="alert alert-danger">{error}</div>}
@@ -264,6 +303,16 @@ const BillForm = () => {
                                         onChange={handleChange}
                                     ></textarea>
                                 </div>
+                                {isEditMode && (
+                                    <>
+                                        <hr className='my-4' />
+                                        <BillItemsSection
+                                            billId={billId}
+                                            onTotalChange={handleTotalChange}
+                                        />
+                                        <hr className='my-4' />
+                                    </>
+                                )}
                                 <div className="d-flex justify-content-between">
                                     <button
                                         type="button"
@@ -286,6 +335,17 @@ const BillForm = () => {
                                     </button>
                                 </div>
                             </form>
+                            {successMessage && (
+                                <div className="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i className="bi bi-check-circle me-2"></i>
+                                    {successMessage}
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => setSuccessMessage(null)}
+                                    ></button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

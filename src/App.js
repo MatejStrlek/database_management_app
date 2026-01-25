@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -11,6 +10,9 @@ import CustomerForm from './components/CustomerForm';
 import CustomerDetail from './components/CustomerDetail';
 import BillList from './components/BillList';
 import BillForm from './components/BillForm';
+import ProductsList from './components/ProductsList';
+import ProductForm from './components/ProductForm';
+import ProductDetails from './components/ProductDetails';
 
 function App() {
   return (
@@ -48,6 +50,38 @@ function App() {
             element={
               <ProtectedRoute>
                 <BillForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute>
+                <ProductsList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/add"
+            element={
+              <ProtectedRoute>
+                <ProductForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/:id"
+            element={
+              <ProtectedRoute>
+                <ProductDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/edit/:id"
+            element={
+              <ProtectedRoute>
+                <ProductForm />
               </ProtectedRoute>
             }
           />

@@ -34,8 +34,13 @@ const Navbar = () => {
                         {isAuthenticated ? (
                             <>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to="/products">
+                                        Products
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
                                     <span className="nav-link">
-                                        Welcome, {user?.name || user?.email}
+                                        <b>Welcome, {user?.name || user?.email}</b>
                                     </span>
                                 </li>
                                 <li className="nav-item">

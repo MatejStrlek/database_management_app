@@ -28,6 +28,7 @@ const CustomerList = () => {
 
             const citiesResponse = await fetchCities();
             const customersWithCities = response.data.map((customer) => {
+                // eslint-disable-next-line
                 const city = citiesResponse.find((c) => c.id == customer.cityId);
                 return { ...customer, City: city || null };
             });
@@ -150,7 +151,7 @@ const CustomerList = () => {
                         onChange={handleSearch}
                     />
                 </div>
-                <div className="col-md-6 d-flex justify-content-end">
+                <div className="col-md-6 d-flex justify-content-end align-items-center">
                     <label className="me-2">Items per page:</label>
                     <select
                         className="form-select w-auto"

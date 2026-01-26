@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchCustomers, deleteCustomer, fetchCities } from '../services/customerService';
-import { getAuthToken } from '../services/authService';
+import { fetchCustomers, deleteCustomer, fetchCities } from '../../services/customerService';
+import { getAuthToken } from '../../services/authService';
 
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);

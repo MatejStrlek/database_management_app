@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { createBill, getBillById, updateBill } from '../services/billService';
-import { fetchCustomerById } from '../services/customerService';
-import { getAllCreditCards } from '../services/creditCardService';
-import { useAuth } from '../context/AuthContext';
+import { createBill, getBillById, updateBill } from '../../services/billService';
+import { fetchCustomerById } from '../../services/customerService';
+import { getAllCreditCards } from '../../services/creditCardService';
+import { useAuth } from '../../context/AuthContext';
 import BillItemsSection from './BillItemsSection';
-import { getSellerById, getAllSellers } from '../services/sellerService';
+import { getSellerById, getAllSellers } from '../../services/sellerService';
 
 const BillForm = () => {
     const { billId, customerId } = useParams();

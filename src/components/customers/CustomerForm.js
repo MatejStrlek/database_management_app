@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createCustomer, updateCustomer, fetchCities, fetchCustomerById } from '../services/customerService';
+import { createCustomer, updateCustomer, fetchCities, fetchCustomerById } from '../../services/customerService';
 
 const CustomerForm = () => {
     const { id } = useParams();

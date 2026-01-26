@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { getAllProducts, createProduct, updateProduct } from '../services/productService';
-import { getAllSubcategories } from '../services/subcategoryService';
+import { getAllProducts, createProduct, updateProduct } from '../../services/productService';
+import { getAllSubcategories } from '../../services/subcategoryService';
 
 const ProductForm = () => {
     const [formData, setFormData] = useState({

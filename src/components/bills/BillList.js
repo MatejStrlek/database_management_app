@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getBillsByCustomerId, deleteBill } from '../services/billService';
-import { fetchCustomerById } from '../services/customerService';
-import { useAuth } from '../context/AuthContext';
-import { getAllCreditCards } from '../services/creditCardService';
+import { getBillsByCustomerId, deleteBill } from '../../services/billService';
+import { fetchCustomerById } from '../../services/customerService';
+import { useAuth } from '../../context/AuthContext';
+import { getAllCreditCards } from '../../services/creditCardService';
 
 const BillList = () => {
     const { customerId } = useParams();

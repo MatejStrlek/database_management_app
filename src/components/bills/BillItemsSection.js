@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getBillItemsByBillId, createBillItem, deleteBillItem } from '../services/billItemService';
-import { getAllProducts } from '../services/productService';
+import { getBillItemsByBillId, createBillItem, deleteBillItem } from '../../services/billItemService';
+import { getAllProducts } from '../../services/productService';
 
 const BillItemsSection = ({ billId, onTotalChange }) => {
     const [billItems, setBillItems] = useState([]);

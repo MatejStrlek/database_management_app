@@ -1,18 +1,18 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CustomerList from './components/CustomerList';
-import Navbar from './components/Navbar';
-import ProtectedRoute from './components/ProtectedRoute';
+import CustomerList from './components/customers/CustomerList';
+import Navbar from './components/common/Navbar';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
-import CustomerForm from './components/CustomerForm';
-import CustomerDetail from './components/CustomerDetail';
-import BillList from './components/BillList';
-import BillForm from './components/BillForm';
-import ProductsList from './components/ProductsList';
-import ProductForm from './components/ProductForm';
-import ProductDetails from './components/ProductDetails';
+import CustomerForm from './components/customers/CustomerForm';
+import CustomerDetail from './components/customers/CustomerDetail';
+import BillList from './components/bills/BillList';
+import BillForm from './components/bills/BillForm';
+import ProductsList from './components/products/ProductsList';
+import ProductForm from './components/products/ProductForm';
+import ProductDetails from './components/products/ProductDetails';
 
 function App() {
   return (

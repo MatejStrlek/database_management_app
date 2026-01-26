@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { fetchCustomerById, deleteCustomer, fetchCities } from '../services/customerService';
-import { useAuth } from '../context/AuthContext';
+import { fetchCustomerById, deleteCustomer, fetchCities } from '../../services/customerService';
+import { useAuth } from '../../context/AuthContext';
 
 const CustomerDetail = () => {
     const { id } = useParams();

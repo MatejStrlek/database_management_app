@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getAllProducts } from '../services/productService';
-import { getAllSubcategories } from '../services/subcategoryService';
-import { getAllCategories } from '../services/categoryService';
+import { getAllProducts } from '../../services/productService';
+import { getAllSubcategories } from '../../services/subcategoryService';
+import { getAllCategories } from '../../services/categoryService';
 
 const ProductDetails = () => {
     const [product, setProduct] = useState(null);

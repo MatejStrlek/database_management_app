@@ -23,6 +23,7 @@ const CustomerDetail = () => {
             setLoading(true);
             const customerData = await fetchCustomerById(id);
             const cities = await fetchCities();
+            // eslint-disable-next-line
             const customerCity = cities.find(city => city.id == customerData.cityId);
             const customerWithCity = { ...customerData, City: customerCity || null };
             setCustomer(customerWithCity);

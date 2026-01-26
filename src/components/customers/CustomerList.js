@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchCustomers, deleteCustomer, fetchCities } from '../../services/customerService';
 import { getAuthToken } from '../../services/authService';
+import { getSortIcon } from '../../utils/sortHelper';
 
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
@@ -53,11 +54,6 @@ const CustomerList = () => {
             setSortOrder('asc');
         }
         setCurrentPage(1);
-    };
-
-    const getSortIcon = (field) => {
-        if (sortField !== field) return '⇅';
-        return sortOrder === 'asc' ? '↑' : '↓';
     };
 
     const handleSearch = (e) => {
@@ -174,19 +170,19 @@ const CustomerList = () => {
                             <thead>
                                 <tr>
                                     <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>
-                                        ID {getSortIcon('id')}
+                                        ID {getSortIcon('id', sortField, sortOrder)}
                                     </th>
                                     <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
-                                        First Name {getSortIcon('name')}
+                                        First Name {getSortIcon('name', sortField, sortOrder)}
                                     </th>
                                     <th onClick={() => handleSort('surname')} style={{ cursor: 'pointer' }}>
-                                        Last Name {getSortIcon('surname')}
+                                        Last Name {getSortIcon('surname', sortField, sortOrder)}
                                     </th>
                                     <th onClick={() => handleSort('email')} style={{ cursor: 'pointer' }}>
-                                        Email {getSortIcon('email')}
+                                        Email {getSortIcon('email', sortField, sortOrder)}
                                     </th>
                                     <th onClick={() => handleSort('telephone')} style={{ cursor: 'pointer' }}>
-                                        Phone {getSortIcon('telephone')}
+                                        Phone {getSortIcon('telephone', sortField, sortOrder)}
                                     </th>
                                     <th>City</th>
                                     {isAuthenticated && <th>Actions</th>}

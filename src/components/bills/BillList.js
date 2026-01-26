@@ -4,6 +4,8 @@ import { getBillsByCustomerId, deleteBill } from '../../services/billService';
 import { fetchCustomerById } from '../../services/customerService';
 import { useAuth } from '../../context/AuthContext';
 import { getAllCreditCards } from '../../services/creditCardService';
+import { formatCurrency } from '../../utils/formatters';
+import { getSortIcon } from '../../utils/sortHelper';
 
 const BillList = () => {
     const { customerId } = useParams();
@@ -125,16 +127,6 @@ const BillList = () => {
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
-    const formatCurrency = (amount) => {
-        if (amount === undefined || amount === null) {
-            return '$0.00';
-        }
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
-    };
-
     const getCreditCardType = (creditCardId) => {
         if (!creditCardId) {
             return <span className="badge bg-secondary">Cash</span>;
@@ -168,11 +160,6 @@ const BillList = () => {
         const colorClass = cardTypeColors[card.type] || 'bg-secondary';
         const displayName = cardTypeNames[card.type] || card.type;
         return <span className={`badge ${colorClass}`}>{displayName}</span>;
-    };
-
-    const getSortIcon = (field) => {
-        if (sortField !== field) return '⇅';
-        return sortOrder === 'asc' ? '↑' : '↓';
     };
 
     if (loading && !bills.length) {
@@ -214,9 +201,9 @@ const BillList = () => {
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>ID {getSortIcon('id')}</th>
-                        <th onClick={() => handleSort('date')} style={{ cursor: 'pointer' }}>Date {getSortIcon('date')}</th>
-                        <th onClick={() => handleSort('total')} style={{ cursor: 'pointer' }}>Amount {getSortIcon('total')}</th>
+                        <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>ID {getSortIcon('id', sortField, sortOrder)}</th>
+                        <th onClick={() => handleSort('date')} style={{ cursor: 'pointer' }}>Date {getSortIcon('date', sortField, sortOrder)}</th>
+                        <th onClick={() => handleSort('total')} style={{ cursor: 'pointer' }}>Amount {getSortIcon('total', sortField, sortOrder)}</th>
                         <th>Payment Method</th>
                         <th>Comment</th>
                         {user && <th>Actions</th>}

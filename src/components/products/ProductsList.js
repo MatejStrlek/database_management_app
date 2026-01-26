@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAllProducts, deleteProduct } from '../../services/productService';
+import { getSortIcon } from '../../utils/sortHelper';
 
 const ProductsList = () => {
     const [products, setProducts] = useState([]);
@@ -73,11 +74,6 @@ const ProductsList = () => {
             return 0;
         });
         setFilteredProducts(sorted);
-    };
-
-    const getSortIcon = (field) => {
-        if (sortField !== field) return ' ⇅';
-        return sortOrder === 'asc' ? ' ↑' : ' ↓';
     };
 
     const handleDelete = async (productId) => {
@@ -245,28 +241,28 @@ const ProductsList = () => {
                                         style={{ cursor: 'pointer' }}
                                         className="user-select-none"
                                     >
-                                        Product Number{getSortIcon('productNumber')}
+                                        Product Number{getSortIcon('productNumber', sortField, sortOrder)}
                                     </th>
                                     <th
                                         onClick={() => handleSort('name')}
                                         style={{ cursor: 'pointer' }}
                                         className="user-select-none"
                                     >
-                                        Name{getSortIcon('name')}
+                                        Name{getSortIcon('name', sortField, sortOrder)}
                                     </th>
                                     <th
                                         onClick={() => handleSort('color')}
                                         style={{ cursor: 'pointer' }}
                                         className="user-select-none"
                                     >
-                                        Color{getSortIcon('color')}
+                                        Color{getSortIcon('color', sortField, sortOrder)}
                                     </th>
                                     <th
                                         onClick={() => handleSort('price')}
                                         style={{ cursor: 'pointer' }}
                                         className="user-select-none"
                                     >
-                                        Price{getSortIcon('price')}
+                                        Price{getSortIcon('price', sortField, sortOrder)}
                                     </th>
                                     <th className="text-center">Actions</th>
                                 </tr>

@@ -6,6 +6,8 @@ import { getAllCreditCards } from '../../services/creditCardService';
 import { useAuth } from '../../context/AuthContext';
 import BillItemsSection from './BillItemsSection';
 import { getSellerById, getAllSellers } from '../../services/sellerService';
+import { generateBillNumber } from '../../utils/generators';
+import { generateGuid } from '../../utils/generators';
 
 const BillForm = () => {
     const { billId, customerId } = useParams();
@@ -49,22 +51,6 @@ const BillForm = () => {
             return () => clearTimeout(timer);
         }
     }, [location.state]);
-
-    const generateBillNumber = () => {
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const randomLetters = letters.charAt(Math.floor(Math.random() * 26)) +
-            letters.charAt(Math.floor(Math.random() * 26));
-        const randomNumbers = Math.floor(10000000 + Math.random() * 90000000).toString();
-        return randomLetters + randomNumbers;
-    };
-
-    const generateGuid = () => {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            const r = (Math.random() * 16) | 0;
-            const v = c === 'x' ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-        });
-    };
 
     const loadCustomer = useCallback(async (id) => {
         try {

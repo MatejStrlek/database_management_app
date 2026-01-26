@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { getAllCreditCards } from '../../services/creditCardService';
 import { formatCurrency } from '../../utils/formatters';
 import { getSortIcon } from '../../utils/sortHelper';
+import Pagination from '../common/Pagination';
 
 const BillList = () => {
     const { customerId } = useParams();
@@ -115,13 +116,6 @@ const BillList = () => {
         }
     };
 
-    const handleItemsPerPageChange = (e) => {
-        setItemsPerPage(parseInt(e.target.value, 10));
-        setCurrentPage(1);
-    };
-
-    const totalPages = Math.ceil(totalBills / itemsPerPage);
-
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -180,14 +174,6 @@ const BillList = () => {
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <label>Items per page: </label>
-                    <select value={itemsPerPage} onChange={handleItemsPerPageChange} className="form-select d-inline-block w-auto ms-2">
-                        {[5, 10, 20, 50].map((size) => (
-                            <option key={size} value={size}>{size}</option>
-                        ))}
-                    </select>
-                </div>
-                <div>
                     {user && (
                         <Link to={`/bills/new/${customerId}`} className="btn btn-success me-2">
                             Add New Bill
@@ -235,27 +221,14 @@ const BillList = () => {
                     )}
                 </tbody>
             </table>
-            <div className="d-flex justify-content-between align-items-center">
-                <div>
-                    Page {currentPage} of {totalPages}
-                </div>
-                <div>
-                    <button
-                        className="btn btn-secondary me-2"
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                    >
-                        Previous
-                    </button>
-                    <button
-                        className="btn btn-secondary"
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                    >
-                        Next
-                    </button>
-                </div>
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalBills / itemsPerPage)}
+                onPageChange={(page) => setCurrentPage(page)}
+                itemsPerPage={itemsPerPage}
+                totalItems={totalBills}
+                onItemsPerPageChange={(size) => setItemsPerPage(size)}
+            />
         </div>
     );
 }

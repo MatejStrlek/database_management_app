@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAllProducts, deleteProduct } from '../../services/productService';
 import { getSortIcon } from '../../utils/sortHelper';
+import Pagination from '../common/Pagination';
 
 const ProductsList = () => {
     const [products, setProducts] = useState([]);
@@ -131,36 +132,9 @@ const ProductsList = () => {
     };
 
     const totalItems = filteredProducts.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
     const currentProducts = filteredProducts.slice(startIndex, endIndex);
-
-    const renderPageNumbers = () => {
-        const pageNumbers = [];
-        const maxVisiblePages = 5;
-        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-        if (endPage - startPage < maxVisiblePages - 1) {
-            startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-            pageNumbers.push(
-                <li key={i} className={`page-item ${currentPage === i ? 'active' : ''}`}>
-                    <button
-                        className="page-link"
-                        onClick={() => setCurrentPage(i)}
-                    >
-                        {i}
-                    </button>
-                </li>
-            );
-        }
-
-        return pageNumbers;
-    };
 
     if (!isAuthenticated) {
         return (
@@ -197,11 +171,6 @@ const ProductsList = () => {
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Products Management</h2>
-                {isAuthenticated && (
-                    <Link to="/products/add" className="btn btn-primary">
-                        Add Product
-                    </Link>
-                )}
             </div>
             <div className="row mb-3">
                 <div className="col-md-6">
@@ -213,17 +182,12 @@ const ProductsList = () => {
                         onChange={handleSearch}
                     />
                 </div>
-                <div className="col-md-6 d-flex justify-content-end align-items-center">
-                    <label className="me-2">Items per page:</label>
-                    <select
-                        className="form-select w-auto"
-                        value={itemsPerPage}
-                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                    >
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                    </select>
+                <div className="col-md-6 text-end">
+                    {isAuthenticated && (
+                        <Link to="/products/add" className="btn btn-primary">
+                            Add Product
+                        </Link>
+                    )}
                 </div>
             </div>
             {filteredProducts.length === 0 ? (
@@ -325,52 +289,14 @@ const ProductsList = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div className="text-muted">
-                            Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
-                        </div>
-                        <nav aria-label="Product pagination">
-                            <ul className="pagination mb-0">
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        « First
-                                    </button>
-                                </li>
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        ‹ Previous
-                                    </button>
-                                </li>
-                                {renderPageNumbers()}
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(currentPage + 1)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        Next ›
-                                    </button>
-                                </li>
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(totalPages)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        Last »
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={Math.ceil(totalItems / itemsPerPage)}
+                            onPageChange={setCurrentPage}
+                            itemsPerPage={itemsPerPage}
+                            totalItems={totalItems}
+                            onItemsPerPageChange={setItemsPerPage}
+                        />
                     </div>
                 </>
             )}

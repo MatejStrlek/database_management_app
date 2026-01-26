@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { fetchCustomers, deleteCustomer, fetchCities } from '../../services/customerService';
 import { getAuthToken } from '../../services/authService';
 import { getSortIcon } from '../../utils/sortHelper';
+import Pagination from '../common/Pagination';
 
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
@@ -72,65 +73,10 @@ const CustomerList = () => {
         }
     };
 
-    const handleItemsPerPageChange = (e) => {
-        setItemsPerPage(parseInt(e.target.value, 10));
-        setCurrentPage(1);
-    };
-
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-    const renderPageNumbers = () => {
-        const maxVisiblePages = 5;
-        const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-        const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-        const pages = [];
-
-        if (startPage > 1) {
-            pages.push(1);
-            if (startPage > 2) {
-                pages.push('...');
-            }
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-            pages.push(i);
-        }
-
-        if (endPage < totalPages) {
-            if (endPage < totalPages - 1) {
-                pages.push('...');
-            }
-            pages.push(totalPages);
-        }
-
-        return pages.map((page, index) => (
-            <li
-                key={index}
-                className={`page-item ${page === currentPage ? 'active' : ''} ${page === '...' ? 'disabled' : ''}`}
-            >
-                {page === '...' ? (
-                    <span className="page-link">...</span>
-                ) : (
-                    <button
-                        className="page-link"
-                        onClick={() => setCurrentPage(page)}
-                    >
-                        {page}
-                    </button>
-                )}
-            </li>
-        ));
-    };
-
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Customer List</h2>
-                {isAuthenticated && (
-                    <Link to="/customers/new" className="btn btn-primary">
-                        Add Customer
-                    </Link>
-                )}
             </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="row mb-3">
@@ -143,18 +89,12 @@ const CustomerList = () => {
                         onChange={handleSearch}
                     />
                 </div>
-                <div className="col-md-6 d-flex justify-content-end align-items-center">
-                    <label className="me-2">Items per page:</label>
-                    <select
-                        className="form-select w-auto"
-                        value={itemsPerPage}
-                        onChange={handleItemsPerPageChange}
-                    >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                    </select>
+                <div className="col-md-6 text-end">
+                    {isAuthenticated && (
+                        <Link to="/customers/new" className="btn btn-primary">
+                            Add Customer
+                        </Link>
+                    )}
                 </div>
             </div>
             {loading ? (
@@ -237,54 +177,15 @@ const CustomerList = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={Math.ceil(totalItems / itemsPerPage)}
+                            onPageChange={(page) => setCurrentPage(page)}
+                            itemsPerPage={itemsPerPage}
+                            totalItems={totalItems}
+                            onItemsPerPageChange={(size) => setItemsPerPage(size)}
+                        />
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div className="text-muted">
-                            Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
-                        </div>
-                        <nav aria-label="Customer pagination">
-                            <ul className="pagination mb-0">
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        « First
-                                    </button>
-                                </li>
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        ‹ Previous
-                                    </button>
-                                </li>
-                                {renderPageNumbers()}
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(currentPage + 1)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        Next ›
-                                    </button>
-                                </li>
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => setCurrentPage(totalPages)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        Last »
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-
                 </>
             )}
         </div>

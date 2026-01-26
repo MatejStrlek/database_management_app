@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { login as loginService } from '../services/authService';
@@ -22,11 +22,6 @@ const Login = () => {
 
         try {
             const response = await loginService(formData);
-
-            console.log('Response in Login component:', response); // Debug
-            console.log('User data:', response.user); // Debug
-
-            // Now response.user should exist
             if (response.user) {
                 login(response.user);
                 navigate('/customers');
@@ -34,7 +29,6 @@ const Login = () => {
                 setError('Failed to retrieve user data');
             }
         } catch (err) {
-            console.error('Login error:', err); // Debug
             setError(err.response?.data?.message || "Login failed. Please try again.");
         } finally {
             setLoading(false);
@@ -53,7 +47,6 @@ const Login = () => {
                                     {error}
                                 </div>
                             )}
-
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email address</label>
@@ -67,7 +60,6 @@ const Login = () => {
                                         required
                                     />
                                 </div>
-
                                 <div className="mb-3">
                                     <label htmlFor="password" className="form-label">Password</label>
                                     <input
@@ -80,12 +72,10 @@ const Login = () => {
                                         required
                                     />
                                 </div>
-
                                 <button type="submit" className="btn btn-primary w-100" disabled={loading}>
                                     {loading ? "Logging in..." : "Login"}
                                 </button>
                             </form>
-
                             <p className="mt-3 text-center">
                                 Don't have an account? <Link to="/register">Register here</Link>
                             </p>

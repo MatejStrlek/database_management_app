@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createCustomer, updateCustomer, fetchCities, fetchCustomerById } from '../services/customerService';
 
@@ -110,9 +110,7 @@ const CustomerForm = () => {
                             <h2 className="card-title mb-4">
                                 {isEditMode ? 'Edit Customer' : 'Add New Customer'}
                             </h2>
-
                             {error && <div className="alert alert-danger">{error}</div>}
-
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="name" className="form-label">Name</label>
@@ -126,7 +124,6 @@ const CustomerForm = () => {
                                         required
                                     />
                                 </div>
-
                                 <div className="mb-3">
                                     <label htmlFor="surname" className="form-label">
                                         Last Name <span className="text-danger">*</span>
@@ -141,7 +138,6 @@ const CustomerForm = () => {
                                         required
                                     />
                                 </div>
-
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">
                                         Email <span className="text-danger">*</span>
@@ -156,7 +152,6 @@ const CustomerForm = () => {
                                         required
                                     />
                                 </div>
-
                                 <div className="mb-3">
                                     <label htmlFor="telephone" className="form-label">
                                         Phone <span className="text-danger">*</span>
@@ -171,7 +166,6 @@ const CustomerForm = () => {
                                         required
                                     />
                                 </div>
-
                                 <div className="mb-3">
                                     <label htmlFor="cityId" className="form-label">
                                         City
@@ -191,7 +185,6 @@ const CustomerForm = () => {
                                         ))}
                                     </select>
                                 </div>
-
                                 <div className="d-flex justify-content-between mt-4">
                                     <button
                                         type="button"

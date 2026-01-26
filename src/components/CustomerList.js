@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchCustomers, deleteCustomer, fetchCities } from '../services/customerService';
 import { getAuthToken } from '../services/authService';
@@ -24,7 +24,6 @@ const CustomerList = () => {
         try {
             const sortParam = sortField ? `${sortField},${sortOrder}` : '';
             const response = await fetchCustomers(currentPage, itemsPerPage, sortParam, searchQuery);
-            console.log('Customer data:', response.data); // Debug - check customers
 
             const citiesResponse = await fetchCities();
             const customersWithCities = response.data.map((customer) => {
@@ -137,10 +136,7 @@ const CustomerList = () => {
                     </Link>
                 )}
             </div>
-
             {error && <div className="alert alert-danger">{error}</div>}
-
-            {/* Controls */}
             <div className="row mb-3">
                 <div className="col-md-6">
                     <input
@@ -165,8 +161,6 @@ const CustomerList = () => {
                     </select>
                 </div>
             </div>
-
-            {/* Customer Table */}
             {loading ? (
                 <div className="text-center">
                     <div className="spinner-border" role="status">
@@ -219,7 +213,7 @@ const CustomerList = () => {
                                             <td>{customer.telephone}</td>
                                             <td>{customer.City?.name || 'N/A'}</td>
                                             {isAuthenticated && (
-                                                <td 
+                                                <td
                                                     onClick={(e) => e.stopPropagation()}
                                                 >
                                                     <Link
@@ -248,12 +242,10 @@ const CustomerList = () => {
                             </tbody>
                         </table>
                     </div>
-
                     <div className="d-flex justify-content-between align-items-center mt-4">
                         <div className="text-muted">
                             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
                         </div>
-
                         <nav aria-label="Customer pagination">
                             <ul className="pagination mb-0">
                                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -265,7 +257,6 @@ const CustomerList = () => {
                                         « First
                                     </button>
                                 </li>
-
                                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"
@@ -275,9 +266,7 @@ const CustomerList = () => {
                                         ‹ Previous
                                     </button>
                                 </li>
-
                                 {renderPageNumbers()}
-
                                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"
@@ -287,7 +276,6 @@ const CustomerList = () => {
                                         Next ›
                                     </button>
                                 </li>
-
                                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"

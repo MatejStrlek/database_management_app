@@ -15,7 +15,7 @@ export const login = async (credentials) => {
         const tokenPayload = JSON.parse(atob(access_token.split('.')[1]));
         const userData = {
             email: tokenPayload.email,
-            name: tokenPayload.email.split('@')[0], // Extract username from email
+            name: tokenPayload.email.split('@')[0],
             id: tokenPayload.email
         };
 
@@ -31,16 +31,13 @@ export const login = async (credentials) => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    console.log('User logged out, token and user removed from localStorage'); // Debug log
 };
 
 export const getCurrentUser = () => {
     const user = localStorage.getItem('user');
-    console.log('Getting user from localStorage:', user); // Debug log
     return user ? JSON.parse(user) : null;
 };
 
 export const getAuthToken = () => {
-    console.log('Getting token from localStorage'); // Debug log
     return localStorage.getItem('token');
 };

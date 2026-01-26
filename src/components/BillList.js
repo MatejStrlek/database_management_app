@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getBillsByCustomerId, deleteBill } from '../services/billService';
 import { fetchCustomerById } from '../services/customerService';
@@ -29,7 +29,6 @@ const BillList = () => {
     }, [user, navigate]);
 
     useEffect(() => {
-        console.log('useEffect triggered for customerId:', customerId); // Debugging log
         fetchCustomer();
         fetchCreditCards();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,13 +50,8 @@ const BillList = () => {
     };
 
     const fetchCreditCards = async () => {
-        console.log('fetchCreditCards called, user:', user); // Debugging log
-
         try {
             const cards = await getAllCreditCards();
-            console.log('getAllCreditCards returned:', cards); // Debugging log
-            console.log('Cards length:', cards?.length); // Debugging log
-
             setCreditCards(cards);
         } catch (err) {
             console.error('Failed to fetch credit cards:', err);
@@ -68,8 +62,6 @@ const BillList = () => {
         setLoading(true);
         try {
             const { bills: billsData, total } = await getBillsByCustomerId(customerId, currentPage, itemsPerPage);
-            console.log('Fetched bills:', billsData); // Debugging log
-
             setBills(billsData);
             setTotalBills(total);
             setError(null);

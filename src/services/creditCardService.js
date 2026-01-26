@@ -23,9 +23,6 @@ export const getAllCreditCards = async () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         });
-
-        console.log('CreditCard data:', response.data); // Debugging log
-
         return response.data;
     } catch (error) {
         console.error('Error fetching credit cards:', error);

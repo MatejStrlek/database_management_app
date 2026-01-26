@@ -134,14 +134,12 @@ const ProductsList = () => {
         return { backgroundColor: color, color: '#212529', border: '1px solid #dee2e6' };
     };
 
-    // Pagination calculations
     const totalItems = filteredProducts.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
-    // Page numbers to display
     const renderPageNumbers = () => {
         const pageNumbers = [];
         const maxVisiblePages = 5;
@@ -232,7 +230,6 @@ const ProductsList = () => {
                     </select>
                 </div>
             </div>
-
             {filteredProducts.length === 0 ? (
                 <div className="alert alert-info" role="alert">
                     No products found. Click "Add Product" to create product.
@@ -333,12 +330,10 @@ const ProductsList = () => {
                             </tbody>
                         </table>
                     </div>
-
                     <div className="d-flex justify-content-between align-items-center mt-4">
                         <div className="text-muted">
                             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
                         </div>
-
                         <nav aria-label="Product pagination">
                             <ul className="pagination mb-0">
                                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -350,7 +345,6 @@ const ProductsList = () => {
                                         « First
                                     </button>
                                 </li>
-
                                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"
@@ -360,9 +354,7 @@ const ProductsList = () => {
                                         ‹ Previous
                                     </button>
                                 </li>
-
                                 {renderPageNumbers()}
-
                                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"
@@ -372,7 +364,6 @@ const ProductsList = () => {
                                         Next ›
                                     </button>
                                 </li>
-
                                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                     <button
                                         className="page-link"

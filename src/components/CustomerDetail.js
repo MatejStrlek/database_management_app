@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { fetchCustomerById, deleteCustomer, fetchCities } from '../services/customerService';
 import { useAuth } from '../context/AuthContext';

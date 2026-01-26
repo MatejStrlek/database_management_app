@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getBillItemsByBillId, createBillItem, deleteBillItem } from '../services/billItemService';
 import { getAllProducts } from '../services/productService';
 
@@ -125,7 +125,6 @@ const BillItemsSection = ({ billId, onTotalChange }) => {
     return (
         <div className="mb-4">
             <h5 className="mb-3">Bill Items</h5>
-
             {error && (
                 <div className="alert alert-danger alert-dismissible fade show" role="alert">
                     {error}
@@ -137,8 +136,6 @@ const BillItemsSection = ({ billId, onTotalChange }) => {
                     ></button>
                 </div>
             )}
-
-            {/* Items Table */}
             <div className="table-responsive mb-3">
                 <table className="table table-sm table-hover">
                     <thead className="table-light">
@@ -205,8 +202,6 @@ const BillItemsSection = ({ billId, onTotalChange }) => {
                     )}
                 </table>
             </div>
-
-            {/* Add Item Form */}
             <div className="card bg-light">
                 <div className="card-body">
                     <h6 className="card-title mb-3">Add New Item</h6>

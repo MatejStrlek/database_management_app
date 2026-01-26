@@ -80,7 +80,6 @@ const ProductDetails = () => {
             </div>
         );
     }
-
     if (error) {
         return (
             <div className="container mt-4">
@@ -90,7 +89,6 @@ const ProductDetails = () => {
             </div>
         );
     }
-
     if (!product) {
         return (
             <div className="container mt-4">

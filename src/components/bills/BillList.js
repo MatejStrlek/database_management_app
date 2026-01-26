@@ -7,6 +7,7 @@ import { getAllCreditCards } from '../../services/creditCardService';
 import { formatCurrency } from '../../utils/formatters';
 import { getSortIcon } from '../../utils/sortHelper';
 import Pagination from '../common/Pagination';
+import { formatDate } from '../../utils/formatters';
 
 const BillList = () => {
     const { customerId } = useParams();
@@ -114,11 +115,6 @@ const BillList = () => {
                 console.error(err);
             }
         }
-    };
-
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
     const getCreditCardType = (creditCardId) => {

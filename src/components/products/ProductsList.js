@@ -103,7 +103,6 @@ const ProductsList = () => {
             </div>
         );
     }
-
     if (loading) {
         return (
             <div className="container mt-4 text-center">
@@ -114,7 +113,6 @@ const ProductsList = () => {
             </div>
         );
     }
-
     if (error) {
         return (
             <div className="container mt-4">

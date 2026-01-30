@@ -17,6 +17,5 @@ export const getSellerById = async (sellerId) => {
             Authorization: `Bearer ${localStorage.getItem('token')}`
         }
     });
-    console.log('Fetched seller:', response.data); // Debugging log
     return response.data;
 };

@@ -40,7 +40,6 @@ export const fetchCustomers = async (page = 1, limit = 10, sort = '', search = '
 
 export const fetchCustomerById = async (id) => {
     const response = await axiosInstance.get(`/Customer/${id}`);
-    console.log(response.data);
     return response.data;
 };
 
@@ -61,6 +60,5 @@ export const deleteCustomer = async (id) => {
 
 export const fetchCities = async () => {
     const response = await axiosInstance.get('/City');
-    console.log(response.data);
     return response.data;
 };
